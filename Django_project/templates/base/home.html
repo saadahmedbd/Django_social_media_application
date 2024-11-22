@@ -1,0 +1,79 @@
+ {% extends "base/main.html" %}
+ <!--child content or speciy the content-->
+ {% block content %}
+ <style>
+    body{
+        background-color: rgb(210, 220, 228);
+    }
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        margin-left:10px;
+    }
+    .topic-style{
+        text-decoration: none;
+        font-size: 15px;
+        color: black;
+        font-family: Verdana;
+    }
+    .create-room-style{
+        text-decoration: none;
+        color: black;
+        font-size: 20px;
+    }
+    .room-count-style{
+        font-size: large;
+    }
+    .update-room{
+        text-decoration: none;
+        color: black;
+    }
+    .update-room-button{
+        height: 20px;
+        width: 60px;
+        font-weight: 100px;
+    }
+    .room-name-style{
+        text-decoration: none;
+        color: black;
+    }
+ </style>
+<div class="home-container">
+    <div>
+        <h1> Browse Topics</h1>
+        <hr>
+        <div>
+            <a class="topic-style" href="{% url 'home' %}">All</a>
+        </div>
+         {% for topic in topics %}
+            
+            <div>
+                <a class="topic-style" href ="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+            </div>
+         {% endfor %}
+    </div>
+    <div >
+        <h5 class="room-count-style">{{room_count}} Rooms Avilable</h5>
+        
+        <a class="create-room-style" href="{% url 'room-form' %}"> CREATE ROOM</a>
+        <hr>
+        {%for room in rooms%}
+        <div>
+            <span>@{{room.host.username}}</span>
+            <h5>
+                
+                <!-- {{room.id}} --<a href="room/{{room.id}}"> {{room.name}}</a> -->   <!-- aibabe dynamic kora jai but nicer approce besi valo-->
+            {{room.id}} --<a class="room-name-style" href="{% url 'room' room.id %}"> {{room.name}} </a>  <!-- url name=room, aibaabe korla tmi jodi url chng koro taw sobjaigai change korte hobe na-->         
+                
+            </h5>
+            <h3 >{{room.topic}}</h3>
+            
+            <a class="update-room" href="{% url 'update-room' room.id %}"><button class="update-room-button">Edit</button></a>
+            <a class="update-room" href="{% url 'delete-room' room.id%}"><button class="update-room-button">Delete</button></a>
+            <hr>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+ {% endblock content %}

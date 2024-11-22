@@ -1,0 +1,30 @@
+<style>
+    .search-button{
+        border: 0 solid rgb(255, 255, 255);
+        height: 20px;
+        padding:7px;
+        border-radius: 5px;
+        border-color: none;
+        font-family: Verdana;
+        font-style: italic;
+        color: rgb(22, 22, 21);
+
+    }
+    .logo-style{
+        text-decoration: none;
+        color: black;
+    }
+
+</style>
+
+<a class="logo-style" href="/"><h1>LOGO</h5></a> 
+
+<!--make search input-->
+<form method ="GET" action="{% url 'home' %}">
+    <input class="search-button" type="text" name="q" placeholder="search Room.. "/>
+</form>
+{% if request.user.is_authenticated %}
+<a href="{% url 'logout' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}">Login</a>
+{% endif %}
