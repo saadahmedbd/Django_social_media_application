@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.db.models import Q
 from . models import Room , Topic
 from . forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages # type: ignore
 from django.contrib.auth import authenticate, login, logout # type: ignore
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm # for register page form
 
 #object render korbo views and template ar maddome
 # rooms =[
@@ -13,12 +16,15 @@ from django.contrib.auth import authenticate, login, logout # type: ignore
 #     {"id":3,"name":"let's learn javaScript"},
 # ]
 def loginPage(request):
+    page='login'
+    if request.user.is_authenticated:
+        return redirect ('home')
     if request.method == "POST":
         username=request.POST.get('username')
         password =request.POST.get('username')
 
         try:
-            user=User.objects.get(username=username)
+            user=User.objects.get(username=username).lower()
         except:
             messages.error(request,"user invalid")
         
@@ -29,12 +35,27 @@ def loginPage(request):
         else:
             messages.error(request,"useranme or password is invalid")
 
-    context={}
+    context={'page':page}
     return render(request, 'base/login_register.html', context)
 
 def  logoutPage(request):
     logout(request)
     return redirect('home')
+
+def registerPage(request):
+    form =UserCreationForm()
+
+    if request.method =="POST":
+        form =UserCreationForm(request.POST)
+        if form.is_valid():
+           user=form.save(commit=False)
+           user.username=user.username.lower()
+           user.save()
+           login(request,user)
+           return redirect('home') 
+        else:
+            messages.error(request, 'an error occured during registration')
+    return render (request, 'base/login_register.html', {'form':form})
 
 def home(request):
     q=request.GET.get('q') if request.GET.get('q') != None else '' # always home page have data
@@ -62,7 +83,7 @@ def room (request,pk):
     context ={'room':room}
     return render(request,"base/room.html", context)
 
-
+@login_required(login_url='login')
 def createRoom(request):
     form =RoomForm()
     if request.method == "POST":
@@ -73,9 +94,14 @@ def createRoom(request):
     context={'form':form}
     return render (request, "base/room_form.html", context)
 
+
+@login_required(login_url='login')
 def updateRoom(request, pk):
     room =Room.objects.get(id=pk)
     form=RoomForm(instance=room)
+
+    if request.user != room.host:
+        return HttpResponse("you are not a user")
 
     if request.method == "POST":
         form =RoomForm(request.POST, instance=room)
@@ -85,8 +111,14 @@ def updateRoom(request, pk):
     context={'form':form}
     return render (request, 'base/room_form.html', context)
 
+
+@login_required(login_url='login')
 def deleteRoom(request, pk):
     room =Room.objects.get(id=pk)
+
+    if request.user != room.host:
+        return HttpResponse("you are not a user")
+
 
     if request.method == 'POST':
         room.delete()

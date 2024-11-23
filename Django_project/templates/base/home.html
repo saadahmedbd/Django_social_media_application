@@ -67,9 +67,10 @@
                 
             </h5>
             <h3 >{{room.topic}}</h3>
-            
+            {% if request.user == room.host %}
             <a class="update-room" href="{% url 'update-room' room.id %}"><button class="update-room-button">Edit</button></a>
             <a class="update-room" href="{% url 'delete-room' room.id%}"><button class="update-room-button">Delete</button></a>
+            {% endif %}
             <hr>
 
         </div>
