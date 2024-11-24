@@ -1,0 +1,18 @@
+{%for room in rooms%}
+<div>
+    <span>@{{room.host.username}}</span>
+    <h5>
+        
+        <!-- {{room.id}} --<a href="room/{{room.id}}"> {{room.name}}</a> -->   <!-- aibabe dynamic kora jai but nicer approce besi valo-->
+    {{room.id}} --<a class="room-name-style" href="{% url 'room' room.id %}"> {{room.name}} </a>  <!-- url name=room, aibaabe korla tmi jodi url chng koro taw sobjaigai change korte hobe na-->         
+        
+    </h5>
+    <h3 >{{room.topic}}</h3>
+    {% if request.user == room.host %}
+    <a class="update-room" href="{% url 'update-room' room.id %}"><button class="update-room-button">Edit</button></a>
+    <a class="update-room" href="{% url 'delete-room' room.id%}"><button class="update-room-button">Delete</button></a>
+    {% endif %}
+    <hr>
+
+</div>
+{% endfor %}
