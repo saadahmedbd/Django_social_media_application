@@ -95,6 +95,16 @@ def room (request,pk):
               'participants':participants}
     return render(request,"base/room.html", context)
 
+def profile (request, pk):
+    
+    user =User.objects.get(id=pk)
+    rooms =user.room_set.all() # only show which user profile you want to check that user room contain you can see
+    topics= Topic.objects.all()
+    room_messages =user.message_set.all() # only show which user profile you want to check that user message you can see
+
+    context={'user':user, 'rooms':rooms ,'topics':topics, 'room_messages':room_messages}
+    return render (request, 'base/profile.html', context)
+
 @login_required(login_url='login')
 def createRoom(request):
     form =RoomForm()

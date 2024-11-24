@@ -1,8 +1,9 @@
 {%for room in rooms%}
 <div>
-    <span>@{{room.host.username}}</span>
+    {% comment %} <span>@{{room.host.username}}</span> {% endcomment %}
+    <a href="{% url 'user-profile' room.host.id %}">@{{room.host.username}}</a>
+
     <h5>
-        
         <!-- {{room.id}} --<a href="room/{{room.id}}"> {{room.name}}</a> -->   <!-- aibabe dynamic kora jai but nicer approce besi valo-->
     {{room.id}} --<a class="room-name-style" href="{% url 'room' room.id %}"> {{room.name}} </a>  <!-- url name=room, aibaabe korla tmi jodi url chng koro taw sobjaigai change korte hobe na-->         
         
