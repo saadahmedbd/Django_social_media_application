@@ -197,3 +197,14 @@ def updateUser (request):
             return redirect ('user-profile', pk=user.id)
 
     return render (request, 'base/update-user.html', {'form':form} )
+
+# views for mobile responsive
+
+def topicPage(request):
+    q=request.GET.get('q') if request.GET.get('q') != None else ''
+    
+    topics=Topic.objects.filter(name__icontains=q) # filter topic through name
+    return render(request, 'base/topics.html',{'topics':topics})
+def activityPage(request):
+    messages =Message.objects.all()
+    return render(request, 'base/activity.html',{'messages':messages})

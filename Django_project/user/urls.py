@@ -14,6 +14,9 @@ urlpatterns = [
 
     path('update-user/',views.updateUser, name="update-user"),
 
+    path('topic/',views.topicPage, name='topic'),
+    path('activity/',views.activityPage, name='activity'),
+
 
 
 
