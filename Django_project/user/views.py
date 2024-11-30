@@ -191,7 +191,7 @@ def updateUser (request):
     form=UserForm(instance=user)
 
     if request.method == 'POST':
-        form =UserForm (request.POST, instance=user)
+        form =UserForm (request.POST,request.FILES, instance=user) # Request.files ar maddome image upadte kora hoilo aita bar frntend setup kora hoica enctyple=multitype
         if form.is_valid():
             form.save()
             return redirect ('user-profile', pk=user.id)
