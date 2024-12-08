@@ -21,7 +21,7 @@ def loginPage(request):
         return redirect ('home')
     if request.method == "POST":
         username=request.POST.get('username')
-        password =request.POST.get('username')
+        password =request.POST.get('password')
 
         try:
             user=User.objects.get(username=username).lower()
@@ -30,8 +30,8 @@ def loginPage(request):
         
         user= authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect ('home')
+             login(request, user)
+             return redirect ('home')
         else:
             messages.error(request,"useranme or password is invalid")
 
